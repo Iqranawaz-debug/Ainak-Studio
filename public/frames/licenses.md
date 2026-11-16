@@ -83,3 +83,18 @@ Licenses were checked on 2026-11-03. Each source page links to Openclipart's lic
 - License URL: https://creativecommons.org/publicdomain/zero/1.0/
 - Attribution required: No
 - Changes: Mirrored the right half, which removes the single raised temple arm.
+
+# Licenses for the README screenshots
+
+The screenshots in docs/screenshots/ show the app trying frames on the portrait below. It is not part of the app itself.
+
+## Face portrait (Unsplash).jpg
+- Used in: every screenshot that shows a face
+- Source: https://commons.wikimedia.org/wiki/File:Face_portrait_(Unsplash).jpg
+- Original: https://unsplash.com/photos/PgSu429ID5o
+- Author: William Stitt
+- License: CC0 1.0 Universal (Public Domain Dedication)
+- License URL: https://creativecommons.org/publicdomain/zero/1.0/
+- Attribution required: No
+- Checked: 2026-11-16, through the Wikimedia Commons file information. The photo was taken on 2016-10-19, before Unsplash stopped using CC0 in June 2017. Commons lists it under "Images from Unsplash (review needed)", so its license review was not yet finished.
+- Changes: For the live camera shots, it was scaled into a 1280 x 720 frame over a blurred copy of itself, standing in for a webcam. Photo mode used it scaled to 2400 px wide.
