@@ -1,0 +1,10 @@
+node_modules
+dist
+*.local
+*.log
+
+# Secrets and local settings never go in the repository
+.env
+.env.*
+.claude/settings.local.json
+.DS_Store

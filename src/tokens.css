@@ -1,0 +1,73 @@
+/* All of the design tokens, in one place. Tailwind turns each of these into classes,
+   for example --radius-card into rounded-card, and --shadow-card into shadow-card. */
+@theme {
+  /* Colors. Clearing the defaults first means Tailwind only offers the project palette,
+     so classes like bg-blue-500 do not exist here. Ink is the charcoal of the palette. */
+  --color-*: initial;
+  --color-ivory: #FAF6F0;
+  --color-ink: #1C1917;
+  --color-coral: #E8553D;
+  --color-amber: #C98A2B;
+  /* Solid hover and pressed shades of ivory, for controls that sit over the video and can't be see-through */
+  --color-ivory-hover: color-mix(in srgb, var(--color-ink) 5%, var(--color-ivory));
+  --color-ivory-pressed: color-mix(in srgb, var(--color-ink) 10%, var(--color-ivory));
+  /* The sign-in showroom's backdrop, from cream to a slightly deeper sand */
+  --color-showroom-cream: color-mix(in srgb, var(--color-amber) 7%, var(--color-ivory));
+  --color-showroom-sand: color-mix(in srgb, var(--color-amber) 30%, var(--color-ivory));
+
+  /* Fonts */
+  --font-*: initial;
+  --font-heading: "Fraunces", serif;
+  --font-body: "DM Sans", sans-serif;
+
+  /* Type scale, smallest to largest */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.4;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.4;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.35;
+  --text-heading: 1.5rem;
+  --text-heading--line-height: 1.25;
+  --text-display: 1.875rem;
+  --text-display--line-height: 1.2;
+  --text-showcase: clamp(1.75rem, 2.7vw, 2.5rem);
+  --text-showcase--line-height: 1.15;
+  --text-countdown: 3.5rem;
+  --text-countdown--line-height: 1;
+
+  /* Corners */
+  --radius-inner: 0.5rem;
+  --radius-control: 0.625rem;
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Soft warm shadows, tinted with ink instead of pure black. There's no glow anywhere. */
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.04), 0 8px 24px rgb(28 25 23 / 0.08);
+  --shadow-raised: 0 2px 4px rgb(28 25 23 / 0.06), 0 16px 40px rgb(28 25 23 / 0.14);
+
+  /* Spacing */
+  --spacing-gutter: 1rem;
+  --spacing-section: 1.5rem;
+}
+
+/* Sizes for laying out the page */
+:root {
+  /* The Studio's side panel: between 440 and 480px, or 400px on smaller desktops */
+  --layout-panel-width: clamp(440px, 30vw, 480px);
+  --layout-column-gap: 1.5rem;
+  /* The fixed heights around the Studio: the header, the footer bar, and the Customize bar */
+  --layout-header: 65px;
+  --layout-footer: 33px;
+  --layout-customize: 5.875rem;
+  /* What's left for the Studio after the header, footer bar and 16px above and below it */
+  --layout-studio-height: calc(100dvh - var(--layout-header) - var(--layout-footer) - 2rem);
+}
+
+@media (max-width: 1280px) {
+  :root {
+    --layout-panel-width: 400px;
+  }
+}

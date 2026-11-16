@@ -1,0 +1,289 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@layer base {
+  /* Light theme only */
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+  /* Replace the browser's default blue highlights */
+  ::selection {
+    background-color: var(--color-amber);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-coral);
+    outline-offset: 2px;
+  }
+
+  /* Edge has its own eye on password fields, which would double up with ours */
+  input::-ms-reveal {
+    display: none;
+  }
+}
+
+/* The /try page layout. Sizes the video from the space available on desktop, as large as it can be.
+   Its height is the column's width at 4:3, or whatever height is left above the Customize bar. A short window
+   then lets it grow wider, up to 16:9, the shape of most cameras, instead of leaving empty space at its sides. */
+.try-layout {
+  container-type: inline-size;
+  --video-column: calc(100cqw - var(--layout-panel-width) - var(--layout-column-gap));
+  --video-height: max(16rem, min(var(--video-column) * 0.75, var(--layout-studio-height) - var(--layout-customize) - 0.75rem));
+  --video-width: min(var(--video-column), var(--video-height) * 16 / 9);
+}
+
+/* Everything that moves in the interface animates transform and opacity only, and nothing else. */
+
+/* The soft flash when a photo is taken. It fades out by itself. */
+.camera-flash {
+  background-color: var(--color-ivory);
+  opacity: 0;
+  animation: camera-flash 350ms ease-out;
+}
+
+@keyframes camera-flash {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Modals rise into place, drawers slide in from the edge, and toasts and tooltips fade in */
+.ui-modal {
+  animation: ui-rise 180ms ease-out;
+}
+
+.ui-drawer {
+  animation: ui-rise 220ms ease-out;
+}
+
+@media (min-width: 64rem) {
+  .ui-drawer {
+    animation-name: ui-slide;
+  }
+}
+
+.ui-modal::backdrop,
+.ui-drawer::backdrop {
+  animation: ui-fade 180ms ease-out;
+}
+
+.ui-toast {
+  animation: ui-rise 180ms ease-out;
+}
+
+.ui-tooltip {
+  animation: ui-fade 120ms ease-out 200ms backwards;
+}
+
+@keyframes ui-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes ui-slide {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+/* Each frame card rises in shortly after the one before it */
+.ui-enter {
+  animation: ui-rise 260ms ease-out backwards;
+  animation-delay: calc(var(--enter-index, 0) * 35ms);
+}
+
+/* A small bounce when a swatch is chosen */
+.ui-pop {
+  animation: ui-pop 220ms ease-out;
+}
+
+@keyframes ui-pop {
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+/* The glasses fade out when the face is lost. The time must match GLASSES_FADE_MS in FaceCamera. */
+.glasses-fade {
+  transition: opacity 350ms ease-out;
+}
+
+/* Changing data-mode swaps the animation's name, which plays the fade again for the new glasses */
+.glasses-layer[data-mode="2d"] {
+  animation: glasses-fade-2d 350ms ease-out;
+}
+
+.glasses-layer[data-mode="3d"] {
+  animation: glasses-fade-3d 350ms ease-out;
+}
+
+@keyframes glasses-fade-2d {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes glasses-fade-3d {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Viewfinder: a soft warm darkening toward the edges of the video */
+.video-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--color-ink) 65%, var(--color-amber)) 135%);
+  opacity: 0.55;
+}
+
+/* Film grain: a small grey noise tile at 3%, drawn once, then shifted in steps to look alive.
+   The Performance setting removes it. */
+.film-grain {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  will-change: transform;
+  animation: film-grain 0.9s steps(1) infinite;
+}
+
+html[data-performance="on"] .film-grain {
+  display: none;
+}
+
+/* The sign-in showroom's grain sits still, as nothing there needs to look like moving film */
+.film-grain-still {
+  will-change: auto;
+  animation: none;
+}
+
+@keyframes film-grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-3%, 2%);
+  }
+  50% {
+    transform: translate(2%, -4%);
+  }
+  75% {
+    transform: translate(-2%, -2%);
+  }
+}
+
+/* The one-time scan: the line sits on this layer's bottom edge, which sweeps from the top of the video
+   to the bottom, fading over the last part */
+.face-scan {
+  animation: face-scan 1.2s ease-in-out forwards;
+}
+
+@keyframes face-scan {
+  from {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+/* Sign-in page: the heading and fields fade in when switching between sign up and sign in */
+.auth-fade {
+  animation: auth-fade 220ms ease-out;
+}
+
+@keyframes auth-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
+/* The showroom: a soft warm backdrop, with the hero floating a few pixels above its floor shadow */
+.showroom-backdrop {
+  background: linear-gradient(165deg, var(--color-showroom-cream) 15%, var(--color-showroom-sand) 100%);
+}
+
+.hero-float {
+  animation: hero-float 7s ease-in-out infinite alternate;
+}
+
+@keyframes hero-float {
+  from {
+    transform: translateY(5px);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.hero-floor-shadow {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-ink) 28%, transparent), transparent);
+  animation: hero-floor-shadow 7s ease-in-out infinite alternate;
+}
+
+/* As the hero rises its shadow tightens and fades a little */
+@keyframes hero-floor-shadow {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.93);
+    opacity: 0.8;
+  }
+}
+
+/* Only for the drawn hero, used if 3D can't run. The 3D hero turns itself. */
+.hero-drawn-turn {
+  animation: hero-drawn-turn 14s ease-in-out infinite alternate;
+}
+
+@keyframes hero-drawn-turn {
+  from {
+    transform: perspective(900px) rotateY(-12deg);
+  }
+  to {
+    transform: perspective(900px) rotateY(12deg);
+  }
+}
+
+/* For people who ask for less motion, nothing moves: animations and transitions jump to their end */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  *::backdrop {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
