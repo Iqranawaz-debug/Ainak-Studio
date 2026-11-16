@@ -133,4 +133,4 @@ Built with React, Vite, Tailwind CSS, three.js and MediaPipe.
 
 ## License
 
-No license has been chosen for this project's own code yet, so all rights are reserved by its author.
+The code is released under the [MIT License](LICENSE). The frame art, fonts and libraries listed under [Credits](#credits) keep their own licenses.
